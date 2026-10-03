@@ -123,4 +123,4 @@ html[data-theme="dark"] .theme-btn .i-moon{display:block;}
 
 /* ---------- footer contact labels in orange ---------- */
 .foot-h{font-weight:900;}
-.foot-contact p::first-line{color:var(--orange-light);letter-spacing:.02em;}
+.foot-contact p::first-line{color:var(--orange-light);font-weight:800;letter-spacing:.02em;}
