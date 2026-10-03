@@ -1,0 +1,34 @@
+name: centre-footer
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Centre the footer
+        run: python3 .github/scripts/centre_footer.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "Footer: centre the content"
+            git push
+          fi
+
+      - name: Remove this one-off tooling
+        run: |
+          git rm -q .github/workflows/centre-footer.yml .github/scripts/centre_footer.py
+          git commit -m "Remove one-off footer tooling"
+          git push
