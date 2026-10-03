@@ -1,0 +1,24 @@
+name: Import site files
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and import source
+        run: |
+          set -e
+          curl -sSL -o /tmp/src.tar.gz https://github.com/syamananth05-dev/infisource-website/archive/refs/heads/main.tar.gz
+          mkdir -p /tmp/src
+          tar -xzf /tmp/src.tar.gz -C /tmp/src --strip-components=1
+          cp -a /tmp/src/. .
+          rm -rf /tmp/src /tmp/src.tar.gz
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Import InfiSource website files"; git push; fi
