@@ -79,6 +79,20 @@
   }
 
   /* ---------- submission ---------- */
+  function submitToFunction(params, files, done){
+    var fd = new FormData();
+    Object.keys(params).forEach(function(k){
+      fd.append(k, params[k] == null ? '' : String(params[k]));
+    });
+    files.forEach(function(f){
+      if (f.file) fd.append('documents', f.file, f.name || f.file.name || 'document');
+    });
+    fetch('/.netlify/functions/send', { method: 'POST', body: fd })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ done(j && j.ok ? { ok: true } : { error: (j && j.error) || 'Server error' }); })
+      .catch(function(){ done({ mailto: true }); });
+  }
+
   function submitToSheet(params, files, done){
     var keys = Object.keys(params);
     var body = new URLSearchParams();
@@ -322,7 +336,7 @@
       msmeCert.items.forEach(function(f){ files.push({ file: f, name: f.name, label: 'MSME certificate' }); });
       dealCert.items.forEach(function(f){ files.push({ file: f, name: f.name, label: 'Dealer/Distributor certificate' }); });
       var est = params.company_name ? ' - ' + params.company_name : '';
-      submitToSheet(params, files, function(res){
+      submitToFunction(params, files, function(res){
         btn.disabled = false; btn.textContent = 'Submit Registration';
         if (res.mailto){
           mailtoFallback(params, 'Vendor Registration' + est);
@@ -338,6 +352,7 @@
         }
         if (res.ok){
           try { localStorage.removeItem(DKEY); } catch(e){}
+          $('#vf-succ-note').textContent = 'Thank you. Your registration has been received and our team will review it shortly. We will write to you at the email address you gave us.';
           $('#vf-success').classList.add('show');
           vform.style.display = 'none';
           var r2 = $('#vf-rail'); if (r2) r2.style.display = 'none';
