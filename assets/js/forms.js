@@ -327,9 +327,9 @@
         if (res.mailto){
           mailtoFallback(params, 'Vendor Registration' + est);
           var succ = $('#vf-success');
-          $('#vf-succ-note').textContent = 'Your email app should now open with all your details filled in and addressed to info@infisource.in. ' +
-            'Please attach your GST certificate, PAN card, cancelled cheque and catalogue, then press Send. ' +
-            'Once we receive it, our team will review your registration and reply on the same email.';
+          $('#vf-succ-note').textContent = 'One step left: your email app should now be open with your details filled in. ' +
+            'Attach your GST certificate, PAN card, cancelled cheque and catalogue, then press Send. ' +
+            'We receive your registration only once you send that email.';
           vform.style.display = 'none';
           var rail = $('#vf-rail'); if (rail) rail.style.display = 'none';
           succ.classList.add('show');
