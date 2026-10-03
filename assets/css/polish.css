@@ -122,4 +122,5 @@ html[data-theme="dark"] .theme-btn .i-moon{display:block;}
 .about-copy>p:first-of-type::first-letter{font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;float:none;padding:0;}
 
 /* ---------- footer contact labels in orange ---------- */
-.foot-contact p::first-line{color:var(--orange-light);font-weight:800;letter-spacing:.02em;}
+.foot-h{font-weight:900;}
+.foot-contact p::first-line{color:var(--orange-light);letter-spacing:.02em;}
