@@ -1,0 +1,122 @@
+/* ============================================================
+   InfiSource Global - polish pass
+   Loaded after style.css. Typography sizing / weight, footer
+   balance, night mode. No content or structure changes.
+   ============================================================ */
+
+/* ---------- header nav: larger ---------- */
+nav.links{font-size:15.5px;}
+nav.links a{margin-left:27px;}
+
+/* ---------- calmer weights (heavy 800 -> 700 on secondary text) ---------- */
+.btn,.btn-outline,.eyebrow,.section-eyebrow,.side-card h4,.why-card h4,.tile-title,
+.nav-chips a,.nav-chips button,.cat-tag,.cat-label,.ind-tile span,.p-num,.p-row h4,
+.cm-card h4,.c-label,.exp-title .cat-tag,.exp-count,.foot-h,.vf-step-h .n,
+.field label,.file-zone .fz-t{font-weight:700;}
+.tile-num{font-size:12px;font-weight:600;}
+.stat span{font-weight:600;}
+
+/* ---------- footer: rebalanced + reordered (desktop only, so the
+   responsive breakpoints in style.css keep working) ---------- */
+@media(min-width:1021px){
+  .foot-grid{grid-template-columns:1.7fr .9fr 1.5fr 2.4fr;gap:42px;}
+  .foot-grid>*:nth-child(1){order:1;}
+  .foot-grid>*:nth-child(2){order:2;}
+  .foot-grid>*:nth-child(3){order:4;}
+  .foot-grid>*:nth-child(4){order:3;}
+}
+.foot-brand p{max-width:340px;}
+.foot-cats a{padding:5.5px 0;}
+
+/* ============ night mode ============ */
+html[data-theme="dark"]{color-scheme:dark;
+  --paper:#131211; --white:#1C1B19; --grey-100:#232220; --line:rgba(255,255,255,.11);
+  --ink:#F3F0EA; --grey-700:#C7C2B6; --grey-500:#9B968A;
+  --orange-tint:#3A2A1B; --orange-tint-2:#4B3522;
+  --shadow-soft:0 1px 2px rgba(0,0,0,.45),0 10px 28px -10px rgba(0,0,0,.55);
+  --shadow-lift:0 2px 4px rgba(0,0,0,.45),0 26px 54px -14px rgba(0,0,0,.65);
+}
+html[data-theme="dark"] .hero{background:linear-gradient(180deg,#0E0D0C 0%,#141312 100%);color:#fff;}
+html[data-theme="dark"] .marquee{background:#0E0D0C;color:var(--grey-300);}
+html[data-theme="dark"] .marquee.mq-orange{background:var(--orange);color:#fff;}
+html[data-theme="dark"] .promise{background:#0E0D0C;}
+html[data-theme="dark"] .contact-band{background:linear-gradient(180deg,#0E0D0C 0%,#141312 100%);}
+html[data-theme="dark"] footer,html[data-theme="dark"] footer.site-foot{background:linear-gradient(180deg,#0E0D0C 0%,#141312 100%);}
+html[data-theme="dark"] .preloader{background:#0E0D0C;}
+html[data-theme="dark"] .side-card{background:#242320;border:1px solid rgba(255,255,255,.08);}
+html[data-theme="dark"] .ind-band{background:#242320;border:1px solid rgba(255,255,255,.08);}
+html[data-theme="dark"] .rail-card{background:#242320;border:1px solid rgba(255,255,255,.08);}
+html[data-theme="dark"] header{background:rgba(19,18,17,.82);}
+html[data-theme="dark"] header.scrolled{background:rgba(19,18,17,.95);box-shadow:0 12px 34px -18px rgba(0,0,0,.6);}
+html[data-theme="dark"] .drawer{background:#151413;}
+html[data-theme="dark"] .drawer nav a{background:#1C1B19;border-color:var(--line);color:var(--grey-300);}
+html[data-theme="dark"] .drawer nav a:hover,html[data-theme="dark"] .drawer nav a.page-on{background:var(--orange-tint);border-color:var(--orange);color:#fff;}
+html[data-theme="dark"] .btn-outline.on-light{background:transparent;border-color:rgba(255,255,255,.28);color:var(--ink);}
+
+/* ---------- night mode toggle button ---------- */
+.theme-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--white);color:var(--grey-700);
+  display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;margin-right:14px;
+  transition:border-color .2s var(--ease),color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease);}
+.theme-btn:hover{border-color:var(--orange);color:var(--orange-deep);transform:translateY(-1px);}
+.theme-btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px;}
+.theme-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.theme-btn .i-moon{display:none;}
+html[data-theme="dark"] .theme-btn{color:var(--grey-300);}
+html[data-theme="dark"] .theme-btn .i-sun{display:none;}
+html[data-theme="dark"] .theme-btn .i-moon{display:block;}
+
+/* ---------- small-screen header fit ---------- */
+@media(max-width:520px){.theme-btn{margin-right:9px;width:38px;height:38px;}.theme-btn svg{width:17px;height:17px;}}
+@media(max-width:420px){.nav{gap:14px;}.theme-btn{width:34px;height:34px;margin-right:0;}.theme-btn svg{width:16px;height:16px;}}
+@media(max-width:380px){.nav{gap:11px;}.brand{font-size:16px;gap:9px;}.brand img{width:34px;height:34px;}.burger{width:38px;height:38px;}}
+
+/* ---------- hamburger menu on every device ---------- */
+.burger{display:block;}
+.nav>nav.links{display:none;}
+.drawer{padding:18px 28px 26px;max-height:calc(100vh - 96px);overflow:auto;}
+.drawer nav{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:10px;}
+@media(min-width:641px) and (max-width:1023px){
+  .drawer nav{grid-template-columns:1fr 1fr;gap:11px;}
+  .drawer nav a:last-child{grid-column:1 / -1;}
+}
+@media(min-width:1024px){
+  .drawer nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;}
+  .drawer nav a{font-size:15px;padding:14px 15px;}
+}
+
+/* ---------- header brand: a touch larger / more dominant ---------- */
+.brand{font-size:27px;}
+.brand img{width:58px;height:58px;}
+@media(max-width:520px){.brand{font-size:20px;}.brand img{width:44px;height:44px;}}
+@media(max-width:380px){.brand{font-size:17px;}.brand img{width:38px;height:38px;}}
+
+/* ---------- header fit with the larger brand ---------- */
+@media(max-width:760px){.nav>.btn{display:none;}}
+@media(max-width:340px){.brand{font-size:16px;}.brand img{width:34px;height:34px;}.theme-btn{width:32px;height:32px;}.burger{width:36px;height:36px;}}
+
+/* ---------- desktop menu panel: premium finish ---------- */
+.drawer nav a{margin-left:0;white-space:normal;}
+@media(min-width:1024px){
+  body.menu-open::before{content:'';position:fixed;inset:0;background:rgba(16,15,14,.5);
+    -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);z-index:29;animation:drawerIn .3s var(--ease);}
+  .drawer{padding:26px 28px 32px;box-shadow:inset 0 1px 0 rgba(237,112,20,.32),0 34px 64px -32px rgba(0,0,0,.55);}
+  .drawer nav{max-width:1124px;gap:14px;}
+  .drawer nav a{padding:24px 20px;font-size:16px;font-weight:600;border-radius:16px;
+    box-shadow:0 16px 32px -24px rgba(27,26,24,.5);animation:cardIn .45s var(--ease-out) backwards;}
+  .drawer nav a:nth-child(2){animation-delay:.05s;}
+  .drawer nav a:nth-child(3){animation-delay:.1s;}
+  .drawer nav a:nth-child(4){animation-delay:.15s;}
+  .drawer nav a:nth-child(5){animation-delay:.2s;}
+  .drawer nav a:hover{transform:translateY(-3px);border-color:var(--orange);
+    box-shadow:0 24px 44px -26px rgba(237,112,20,.6);}
+  .drawer nav a::after{width:9px;height:9px;border-right-color:var(--grey-500);border-top-color:var(--grey-500);}
+  .drawer nav a:hover::after{transform:translateX(3px) rotate(45deg);}
+}
+@media(min-width:1024px) and (max-width:1180px){.drawer nav a{font-size:14.5px;padding:20px 14px;}}
+@keyframes cardIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+
+/* ---------- brand name is mixed case now: tighten tracking ---------- */
+.foot-brand .fb-name{letter-spacing:.04em;}
+
+/* ---------- no drop cap: first letter renders normally ---------- */
+.about-copy>p:first-of-type::first-letter{font-size:inherit;font-weight:inherit;line-height:inherit;color:inherit;float:none;padding:0;}
