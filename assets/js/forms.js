@@ -195,10 +195,10 @@
   var vform = $('#vform');
   if (vform){
     var catalog = { items: [] }, gstCert = { items: [] }, msmeCert = { items: [] }, dealCert = { items: [] };
-    attachPickers('#catalog-zone', '#catalog-list', catalog, { multiple: true, accept: '.pdf,.png,.jpg,.jpeg,.webp,.xlsx,.xls,.csv,.doc,.docx', maxMB: 10, maxFiles: 6 });
-    attachPickers('#gstc-zone', '#gstc-list', gstCert, { accept: '.pdf,.png,.jpg,.jpeg', maxMB: 8, maxFiles: 1 });
-    attachPickers('#msme-zone', '#msme-list', msmeCert, { accept: '.pdf,.png,.jpg,.jpeg', maxMB: 8, maxFiles: 1 });
-    attachPickers('#deal-zone', '#deal-list', dealCert, { accept: '.pdf,.png,.jpg,.jpeg', maxMB: 8, maxFiles: 2 });
+    attachPickers('#catalog-zone', '#catalog-list', catalog, { multiple: true, accept: '.pdf,.png,.jpg,.jpeg,.webp,.xlsx,.xls,.csv,.doc,.docx', maxMB: 3, maxFiles: 4 });
+    attachPickers('#gstc-zone', '#gstc-list', gstCert, { accept: '.pdf,.png,.jpg,.jpeg', maxMB: 2, maxFiles: 1 });
+    attachPickers('#msme-zone', '#msme-list', msmeCert, { accept: '.pdf,.png,.jpg,.jpeg', maxMB: 2, maxFiles: 1 });
+    attachPickers('#deal-zone', '#deal-list', dealCert, { accept: '.pdf,.png,.jpg,.jpeg', maxMB: 2, maxFiles: 2 });
 
     var DKEY = 'infisource_vendor_draft_v1';
     var REQUIRED = ['company_name','entity_type','contact_name','designation','mobile','email','address','city','state','pincode','gstin','payment_terms','lead_time'];
@@ -336,6 +336,12 @@
       msmeCert.items.forEach(function(f){ files.push({ file: f, name: f.name, label: 'MSME certificate' }); });
       dealCert.items.forEach(function(f){ files.push({ file: f, name: f.name, label: 'Dealer/Distributor certificate' }); });
       var est = params.company_name ? ' - ' + params.company_name : '';
+      var totalBytes = files.reduce(function(n, f){ return n + (f.file && f.file.size ? f.file.size : 0); }, 0);
+      if (totalBytes > 4 * 1048576){
+        btn.disabled = false; btn.textContent = 'Submit Registration';
+        toast('Your documents total ' + fmtSize(totalBytes) + '. The limit is 4 MB - please compress them, or email larger files to info@infisource.in.');
+        return;
+      }
       submitToFunction(params, files, function(res){
         btn.disabled = false; btn.textContent = 'Submit Registration';
         if (res.mailto){
