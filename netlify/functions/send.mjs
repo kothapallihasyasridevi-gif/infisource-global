@@ -94,6 +94,7 @@ function buildHtml(fields) {
 }
 
 export default async (req) => {
+  try {
   if (req.method !== "POST") {
     return new Response("Method not allowed", { status: 405 });
   }
@@ -147,4 +148,9 @@ export default async (req) => {
   return new Response(JSON.stringify({ ok: true, files: attachments.length }), {
     status: 200, headers: { "content-type": "application/json" },
   });
+  } catch (err) {
+    return new Response(JSON.stringify({ ok: false, error: String((err && err.message) || err) }), {
+      status: 200, headers: { "content-type": "application/json" },
+    });
+  }
 };

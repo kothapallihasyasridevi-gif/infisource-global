@@ -1,0 +1,7 @@
+{
+  "name": "infisource-global",
+  "private": true,
+  "dependencies": {
+    "nodemailer": "^6.9.13"
+  }
+}
