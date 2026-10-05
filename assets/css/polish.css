@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 /* ============================================================
    InfiSource Corporation - polish pass
    Loaded after style.css. Typography sizing / weight, footer
@@ -124,3 +125,6 @@ html[data-theme="dark"] .theme-btn .i-moon{display:block;}
 /* ---------- footer contact labels in orange ---------- */
 .foot-h{font-weight:900;}
 .foot-contact p::first-line{color:var(--orange-light);font-weight:800;letter-spacing:.02em;}
+
+/* ---------- wordmark font: header brand + footer name ---------- */
+.brand, .foot-brand .fb-name{font-family:'Plus Jakarta Sans','Arial','Liberation Sans',sans-serif;}
