@@ -1,0 +1,50 @@
+name: apply-font-montserrat
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  swap-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Swap wordmark font to Montserrat
+        run: |
+          set -e
+          sed -i "s|Plus+Jakarta+Sans|Montserrat|g" assets/css/polish.css
+          sed -i "s|'Plus Jakarta Sans'|'Montserrat'|g" assets/css/polish.css
+          echo "--- first line ---"
+          head -1 assets/css/polish.css
+          echo "--- last line ---"
+          tail -1 assets/css/polish.css
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Set header and footer wordmark font to Montserrat"
+            git push
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy site to Netlify
+        env:
+          NETLIFY_DEPLOY_PROXY: ${{ secrets.NETLIFY_DEPLOY_PROXY }}
+        run: |
+          npx -y @netlify/mcp@latest \
+            --site-id beea0fd5-a4c1-4b04-bdcd-5462b8662b9b \
+            --proxy-path "$NETLIFY_DEPLOY_PROXY"
+
+      - name: Remove this one-off workflow
+        run: |
+          git rm .github/workflows/apply-font-montserrat.yml
+          git commit -m "Remove one-off Montserrat workflow"
+          git push
