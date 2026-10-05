@@ -1,0 +1,58 @@
+name: apply-font
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  font-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set wordmark font on header and footer
+        run: |
+          set -e
+          cd assets/css
+          {
+            echo "@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');"
+            cat polish.css
+            echo ""
+            echo "/* ---------- wordmark font: header brand + footer name ---------- */"
+            echo ".brand, .foot-brand .fb-name{font-family:'Plus Jakarta Sans','Arial','Liberation Sans',sans-serif;}"
+          } > /tmp/p.css
+          mv /tmp/p.css polish.css
+          echo "--- first line ---"
+          head -1 polish.css
+          echo "--- last two lines ---"
+          tail -2 polish.css
+          cd ../..
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Set header and footer wordmark font to Plus Jakarta Sans"
+            git push
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy site to Netlify
+        env:
+          NETLIFY_DEPLOY_PROXY: ${{ secrets.NETLIFY_DEPLOY_PROXY }}
+        run: |
+          npx -y @netlify/mcp@latest \
+            --site-id beea0fd5-a4c1-4b04-bdcd-5462b8662b9b \
+            --proxy-path "$NETLIFY_DEPLOY_PROXY"
+
+      - name: Remove this one-off workflow
+        run: |
+          git rm .github/workflows/apply-font.yml
+          git commit -m "Remove one-off font workflow"
+          git push
