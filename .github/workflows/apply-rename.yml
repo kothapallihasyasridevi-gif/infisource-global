@@ -1,0 +1,47 @@
+name: apply-rename
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rename-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rename company to InfiSource Corporation
+        run: |
+          set -e
+          FILES=$(find . -path ./.git -prune -o -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.mjs" -o -name "*.md" -o -name "*.gs" \) -print)
+          echo "$FILES" | xargs sed -i 's|<span class="accent">Global</span>|<span class="accent">Corporation</span>|g'
+          echo "$FILES" | xargs sed -i 's/InfiSource Global/InfiSource Corporation/g'
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Rename company to InfiSource Corporation"
+            git push
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Deploy site to Netlify
+        env:
+          NETLIFY_DEPLOY_PROXY: ${{ secrets.NETLIFY_DEPLOY_PROXY }}
+        run: |
+          npx -y @netlify/mcp@latest \
+            --site-id beea0fd5-a4c1-4b04-bdcd-5462b8662b9b \
+            --proxy-path "$NETLIFY_DEPLOY_PROXY"
+
+      - name: Remove this one-off workflow
+        run: |
+          git rm .github/workflows/apply-rename.yml
+          git commit -m "Remove one-off rename workflow"
+          git push
