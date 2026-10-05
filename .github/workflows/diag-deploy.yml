@@ -1,0 +1,44 @@
+name: diag-deploy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Attempt deploy and capture output
+        env:
+          NETLIFY_DEPLOY_PROXY: ${{ secrets.NETLIFY_DEPLOY_PROXY }}
+        run: |
+          set +e
+          npx -y @netlify/mcp@latest \
+            --site-id beea0fd5-a4c1-4b04-bdcd-5462b8662b9b \
+            --proxy-path "$NETLIFY_DEPLOY_PROXY" > /tmp/deploy.log 2>&1
+          code=$?
+          echo "EXIT_CODE=$code" >> /tmp/deploy.log
+          sed -i "s|$NETLIFY_DEPLOY_PROXY|<redacted>|g" /tmp/deploy.log
+          cp /tmp/deploy.log deploy-log.txt
+          echo "----- deploy output -----"
+          tail -c 3000 /tmp/deploy.log
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add deploy-log.txt
+          git commit -m "Capture deploy log" || true
+          git push || true
+
+      - name: Remove this workflow
+        if: always()
+        run: |
+          git rm .github/workflows/diag-deploy.yml || true
+          git commit -m "Remove diag workflow" || true
+          git push || true
