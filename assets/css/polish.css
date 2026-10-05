@@ -126,5 +126,5 @@ html[data-theme="dark"] .theme-btn .i-moon{display:block;}
 .foot-h{font-weight:900;}
 .foot-contact p::first-line{color:var(--orange-light);font-weight:800;letter-spacing:.02em;}
 
-/* ---------- wordmark font: header brand + footer name ---------- */
-.brand, .foot-brand .fb-name{font-family:'Montserrat','Arial','Liberation Sans',sans-serif;}
+/* ---------- wordmark font: header brand only ---------- */
+.brand{font-family:'Montserrat','Arial','Liberation Sans',sans-serif;}
