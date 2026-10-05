@@ -1,6 +1,6 @@
-# InfiSource Global
+# InfiSource Corporation
 
-The InfiSource Global website - a static multi-page site with no build step.
+The InfiSource Corporation website - a static multi-page site with no build step.
 
 ## Pages
 

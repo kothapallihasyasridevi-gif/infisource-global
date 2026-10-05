@@ -1,6 +1,6 @@
 
 /* ============================================================
-   InfiSource Global - form handling (vendor + inquiry)
+   InfiSource Corporation - form handling (vendor + inquiry)
    ============================================================ */
 (function(){
   var d = document, w = window;

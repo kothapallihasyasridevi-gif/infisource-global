@@ -74,7 +74,7 @@ function buildHtml(fields) {
 <div style="font-family:Arial,Helvetica,sans-serif;background:#F5F2EC;padding:24px 14px;">
   <div style="max-width:660px;margin:0 auto;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #E4DFD3;">
     <div style="background:#1B1A18;padding:22px 30px;">
-      <div style="font-size:17px;font-weight:700;color:#ffffff;">InfiSource Global</div>
+      <div style="font-size:17px;font-weight:700;color:#ffffff;">InfiSource Corporation</div>
       <div style="font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;color:#F29D55;margin-top:5px;">Vendor registration</div>
     </div>
     <div style="background:#FCE9D9;padding:13px 30px;font-size:13px;color:#7a4a1e;">

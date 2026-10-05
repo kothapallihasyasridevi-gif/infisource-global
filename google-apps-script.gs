@@ -1,6 +1,6 @@
 /**
  * ============================================================
- *  InfiSource Global - Form Backend (Google Apps Script)
+ *  InfiSource Corporation - Form Backend (Google Apps Script)
  * ============================================================
  *
  *  Receives vendor registrations and website inquiries from the
