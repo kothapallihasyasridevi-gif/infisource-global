@@ -1,0 +1,63 @@
+name: update-address
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  address:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Replace the registered address everywhere
+        run: |
+          python3 - <<'PY'
+          import pathlib
+
+          NEW_HTML  = "Unit No 203, 2nd Floor Suite No.789, SBR CV Towers, Sector-I, Sy No 64, HUDA Techno Enclave, Madhapur, Hyderabad &ndash; 500081"
+          NEW_PLAIN = "Unit No 203, 2nd Floor Suite No.789, SBR CV Towers, Sector-I, Sy No 64, HUDA Techno Enclave, Madhapur, Hyderabad \u2013 500081"
+          NEW_STREET = "Unit No 203, 2nd Floor, Suite No. 789, SBR CV Towers, Sector-I, Sy No 64, HUDA Techno Enclave, Madhapur"
+
+          REPL = [
+            ("5th Floor, Ayyappa Central, Plot Nos. 802 &amp; 803, Ayyappa Society, Khanamet, Madhapur, Hyderabad, Telangana &ndash; 500081", NEW_HTML),
+            ("5th Floor, Ayyappa Central, Plot Nos. 802 & 803, Ayyappa Society, Khanamet, Madhapur, Hyderabad, Telangana \u2013 500081", NEW_PLAIN),
+            ("5th Floor, Ayyappa Central, Plot 802 & 803, Ayyappa Society, Khanamet, Madhapur, Hyderabad 500081", NEW_PLAIN),
+            ("5th Floor, Ayyappa Central, Plot Nos. 802 & 803, Ayyappa Society, Khanamet, Madhapur", NEW_STREET),
+          ]
+
+          OK = ('.html', '.mjs', '.js', '.md', '.txt', '.gs', '.json', '.xml', '.css')
+          for f in pathlib.Path('.').rglob('*'):
+              if not f.is_file(): continue
+              if '.git' in f.parts or 'node_modules' in f.parts: continue
+              if f.suffix.lower() not in OK: continue
+              s = f.read_text(encoding='utf-8', errors='ignore')
+              o = s
+              for a, b in REPL:
+                  s = s.replace(a, b)
+              if s != o:
+                  f.write_text(s, encoding='utf-8')
+                  print('updated', f)
+          print('done')
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update registered address"
+            git push
+          fi
+
+      - name: Remove this workflow
+        if: always()
+        run: |
+          git rm -f .github/workflows/update-address.yml 2>/dev/null || true
+          git commit -m "Remove one-off address workflow" 2>/dev/null || true
+          git push 2>/dev/null || true
