@@ -80,6 +80,8 @@
 
   /* ---------- submission ---------- */
   function submitToFunction(params, files, done){
+    // GitHub-hosted build: no server available, so compose the email instead.
+    done({ mailto: true }); return;
     var fd = new FormData();
     Object.keys(params).forEach(function(k){
       fd.append(k, params[k] == null ? '' : String(params[k]));
@@ -348,8 +350,8 @@
           mailtoFallback(params, 'Vendor Registration' + est);
           var succ = $('#vf-success');
           $('#vf-succ-note').textContent = 'One step left: your email app should now be open with your details filled in. ' +
-            'Attach your GST certificate, PAN card, cancelled cheque and catalogue, then press Send. ' +
-            'We receive your registration only once you send that email.';
+            'Just press Send - no documents needed. ' +
+            'If we need any certificates, we will ask you by reply.';
           vform.style.display = 'none';
           var rail = $('#vf-rail'); if (rail) rail.style.display = 'none';
           succ.classList.add('show');
