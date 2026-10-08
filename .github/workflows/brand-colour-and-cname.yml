@@ -1,0 +1,57 @@
+name: brand-colour-and-cname
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Two-tone header wordmark
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          OLD = '<span>InfiSource Corporation</span></a>'
+          NEW = '<span>InfiSource <span class="accent">Corporation</span></span></a>'
+          for f in ['index.html','about.html','services.html','contact.html','vendor.html']:
+              p = pathlib.Path(f)
+              if not p.exists(): continue
+              s = p.read_text(encoding='utf-8')
+              if OLD in s:
+                  p.write_text(s.replace(OLD, NEW), encoding='utf-8')
+                  print('two-tone applied to', f)
+              else:
+                  print('pattern not found in', f)
+          PY
+
+      - name: Make the orange accent explicit for the header
+        run: |
+          cat >> assets/css/polish.css <<'CSS'
+          .brand{color:var(--ink);}
+          .brand span.accent{color:var(--orange);}
+          CSS
+          echo ok
+
+      - name: Add CNAME so GitHub Pages serves infisource.in
+        run: |
+          printf 'infisource.in\n' > CNAME
+          cat CNAME
+
+      - name: Commit and push
+        run: |
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Two-tone header wordmark; add CNAME for infisource.in"; git push; fi
+
+      - name: Remove this workflow
+        if: always()
+        run: |
+          git rm -f .github/workflows/brand-colour-and-cname.yml 2>/dev/null || true
+          git commit -m "Remove one-off brand workflow" 2>/dev/null || true
+          git push 2>/dev/null || true
