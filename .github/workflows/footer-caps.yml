@@ -1,0 +1,51 @@
+name: footer-caps
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  caps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Footer company name in capitals
+        run: |
+          python3 - <<'PY'
+          import pathlib
+
+          for f in ['index.html','about.html','services.html','contact.html','vendor.html']:
+              p = pathlib.Path(f)
+              if not p.exists(): continue
+              s = p.read_text(encoding='utf-8')
+              o = s
+              s = s.replace('fb-name">InfiSource Corporation Private Limited',
+                            'fb-name">INFISOURCE CORPORATION PRIVATE LIMITED')
+              if s != o:
+                  p.write_text(s, encoding='utf-8')
+                  print('uppercased footer in', f)
+          PY
+
+      - name: Also make the CSS selector safe
+        run: |
+          cat >> assets/css/polish.css <<'CSS'
+          .fb-name{text-transform:uppercase;font-size:15px;letter-spacing:.06em;}
+          CSS
+          echo ok
+
+      - name: Commit and push
+        run: |
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then echo "No changes"; else git commit -m "Footer company name in capitals"; git push; fi
+
+      - name: Remove this workflow
+        if: always()
+        run: |
+          git rm -f .github/workflows/footer-caps.yml 2>/dev/null || true
+          git commit -m "Remove one-off footer workflow" 2>/dev/null || true
+          git push 2>/dev/null || true
