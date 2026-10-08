@@ -1,0 +1,66 @@
+name: uppercase-brand
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  caps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Full company name, upper case, header and footer
+        run: |
+          python3 - <<'PY'
+          import pathlib
+
+          pages = ['index.html', 'about.html', 'services.html', 'contact.html', 'vendor.html']
+
+          for f in pages:
+              p = pathlib.Path(f)
+              s = p.read_text(encoding='utf-8')
+              o = s
+              # header brand: short name -> full company name (CSS renders it upper case)
+              s = s.replace('<span>InfiSource</span></a>', '<span>InfiSource Corporation</span></a>')
+              # footer name stays the full legal name; CSS renders it upper case
+              if s != o:
+                  p.write_text(s, encoding='utf-8')
+                  print('updated', f)
+              else:
+                  print('no header change', f)
+          PY
+
+      - name: Style both panels in caps and size them to fit
+        run: |
+          cat >> assets/css/polish.css <<'CSS'
+
+          /* ---------- company name: upper case in header and footer ---------- */
+          .brand{text-transform:uppercase;font-size:20px;letter-spacing:.005em;gap:12px;}
+          .brand img{width:46px;height:46px;}
+          @media(max-width:520px){.brand{font-size:15px;}.brand img{width:38px;height:38px;}}
+          @media(max-width:380px){.brand{font-size:13px;}.brand img{width:32px;height:32px;}}
+          .foot-brand .fb-name{text-transform:uppercase;font-size:15px;letter-spacing:.06em;}
+          CSS
+          echo '--- header rule ---'; grep -n '.brand{text-transform' assets/css/polish.css
+
+      - name: Commit and push
+        run: |
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Company name in upper case in header and footer"
+            git push
+          fi
+
+      - name: Remove this workflow
+        if: always()
+        run: |
+          git rm -f .github/workflows/uppercase-brand.yml 2>/dev/null || true
+          git commit -m "Remove one-off brand-case workflow" 2>/dev/null || true
+          git push 2>/dev/null || true
