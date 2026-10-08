@@ -1,4 +1,4 @@
-# InfiSource Corporation - Website
+# InfiSource Corporation Private Limited - Website
 
 A complete multi-page static website (no server needed - host it anywhere:
 Netlify, Vercel, GitHub Pages, cPanel, Hostinger, etc.).

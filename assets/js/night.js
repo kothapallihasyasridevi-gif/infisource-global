@@ -1,5 +1,5 @@
 /* ============================================================
-   InfiSource Corporation - night mode
+   InfiSource Corporation Private Limited - night mode
    Loaded in <head> so the saved theme is applied before the
    first paint (no flash). Injects the day/night toggle into
    the header once the DOM is ready.

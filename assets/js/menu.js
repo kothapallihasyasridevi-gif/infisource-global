@@ -1,4 +1,4 @@
-/* InfiSource Corporation - menu behaviour: close on outside click / Escape */
+/* InfiSource Corporation Private Limited - menu behaviour: close on outside click / Escape */
 (function(){
   var d = document;
   function close(){ d.body.classList.remove('menu-open'); }

@@ -1,6 +1,6 @@
-# InfiSource Corporation
+# InfiSource Corporation Private Limited
 
-The InfiSource Corporation website - a static multi-page site with no build step.
+The InfiSource Corporation Private Limited website - a static multi-page site with no build step.
 
 ## Pages
 

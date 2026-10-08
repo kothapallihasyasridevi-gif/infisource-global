@@ -1,6 +1,6 @@
 
 /* ============================================================
-   InfiSource Corporation - form handling (vendor + inquiry)
+   InfiSource Corporation Private Limited - form handling (vendor + inquiry)
    ============================================================ */
 (function(){
   var d = document, w = window;
