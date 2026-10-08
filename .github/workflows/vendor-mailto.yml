@@ -1,0 +1,93 @@
+name: vendor-mailto
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Switch vendor submit to compose an email (no uploads)
+        run: |
+          python3 - <<'PY'
+          import pathlib
+
+          # ---------- forms.js ----------
+          p = pathlib.Path('assets/js/forms.js')
+          s = p.read_text(encoding='utf-8')
+          before = s
+
+          # 1. never post to a server: go straight to composing the email
+          old_fn = "  function submitToFunction(params, files, done){"
+          new_fn = ("  function submitToFunction(params, files, done){\n"
+                    "    // GitHub-hosted build: no server available, so compose the email instead.\n"
+                    "    done({ mailto: true }); return;")
+          assert old_fn in s, 'submitToFunction not found'
+          s = s.replace(old_fn, new_fn, 1)
+
+          # 2. rewrite the success note: nothing to attach
+          s = s.replace(
+            "Attach your GST certificate, PAN card, cancelled cheque and catalogue, then press Send. ",
+            "Just press Send - no documents needed. ")
+          s = s.replace(
+            "We receive your registration only once you send that email.",
+            "If we need any certificates, we will ask you by reply.")
+
+          assert s != before, 'forms.js unchanged'
+          p.write_text(s, encoding='utf-8')
+          print('forms.js updated')
+
+          # ---------- vendor.html ----------
+          v = pathlib.Path('vendor.html')
+          h = v.read_text(encoding='utf-8')
+          hb = h
+
+          # 3. hide the four upload zones
+          for zid in ['catalog-zone', 'gstc-zone', 'msme-zone', 'deal-zone']:
+              a = f'<div class="file-zone" id="{zid}">'
+              b = f'<div class="file-zone" id="{zid}" style="display:none">'
+              if a in h:
+                  h = h.replace(a, b, 1)
+                  print('hid zone', zid)
+
+          # 4. meta description no longer promises a catalogue upload
+          h = h.replace(
+            "covering GST, MSME, categories served, payment terms and your product catalogue.",
+            "covering GST, MSME, categories served and payment terms.")
+
+          # 5. step 7 subtitle: paste only
+          h = h.replace(
+            "Upload a catalogue, paste your product list, or both",
+            "Paste your product list")
+
+          # 6. drop the upload wording from the file-zone lines that remain hidden
+          h = h.replace("PDF, images or spreadsheet &middot; up to 6 files &middot; 10 MB each &middot; or paste your list below", "")
+
+          assert h != hb, 'vendor.html unchanged'
+          v.write_text(h, encoding='utf-8')
+          print('vendor.html updated')
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.name "infisource-bot"
+          git config user.email "info@infisource.in"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Vendor form: no uploads, submit composes the email"
+            git push
+          fi
+
+      - name: Remove this workflow
+        if: always()
+        run: |
+          git rm -f .github/workflows/vendor-mailto.yml 2>/dev/null || true
+          git commit -m "Remove one-off vendor workflow" 2>/dev/null || true
+          git push 2>/dev/null || true
