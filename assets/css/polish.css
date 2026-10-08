@@ -128,3 +128,10 @@ html[data-theme="dark"] .theme-btn .i-moon{display:block;}
 
 /* ---------- wordmark font: header brand only ---------- */
 .brand{font-family:'Montserrat','Arial','Liberation Sans',sans-serif;}
+
+/* ---------- company name: upper case in header and footer ---------- */
+.brand{text-transform:uppercase;font-size:20px;letter-spacing:.005em;gap:12px;}
+.brand img{width:46px;height:46px;}
+@media(max-width:520px){.brand{font-size:15px;}.brand img{width:38px;height:38px;}}
+@media(max-width:380px){.brand{font-size:13px;}.brand img{width:32px;height:32px;}}
+.foot-brand .fb-name{text-transform:uppercase;font-size:15px;letter-spacing:.06em;}
