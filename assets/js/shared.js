@@ -6,7 +6,7 @@
   var finePointer = !(w.matchMedia && w.matchMedia('(pointer: coarse)').matches);
 
   /* failsafe: never leave the preloader up */
-  setTimeout(function(){ d.body.classList.add('pre-done'); d.body.classList.remove('loading'); }, 3200);
+  setTimeout(function(){ d.body.classList.add('pre-done'); d.body.classList.remove('loading'); }, 1000);
 
   /* ---------- preloader intro ---------- */
   var cmarkImg = d.querySelector('.c-mark img, img.pl-src');
@@ -20,9 +20,9 @@
     var done = false;
     function finish(){
       if (done) return; done = true;
-      setTimeout(function(){ d.body.classList.add('pre-done'); d.body.classList.remove('loading'); }, 1050);
+      setTimeout(function(){ d.body.classList.add('pre-done'); d.body.classList.remove('loading'); }, 250);
     }
-    if (d.readyState === 'complete') setTimeout(finish, 150); else w.addEventListener('load', function(){ setTimeout(finish, 150); });
+    if (d.readyState === 'complete') setTimeout(finish, 0); else w.addEventListener('load', function(){ setTimeout(finish, 0); });
   } else {
     d.body.classList.add('pre-done');
   }
