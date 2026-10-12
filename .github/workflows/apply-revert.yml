@@ -1,0 +1,52 @@
+name: apply-revert
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply revert
+        run: |
+          python3 - <<'PY'
+          import re, os
+          NEW = ['stationery-office-supplies.html','corporate-gifting-uniforms.html','pantry-cafeteria-supplies.html',
+                 'facility-maintenance-supplies.html','hyderabad.html']
+          for f in NEW:
+              if os.path.exists(f):
+                  os.remove(f)
+          SLUG2CAT = {
+           'mep-solutions.html':'services.html#cat-mep-solutions',
+           'facility-maintenance-supplies.html':'services.html#cat-facility-maintenance',
+           'stationery-office-supplies.html':'services.html#cat-stationery-and-office-supplies',
+           'housekeeping-supplies.html':'services.html#cat-housekeeping',
+           'pantry-cafeteria-supplies.html':'services.html#cat-pantry-and-cafeteria',
+           'corporate-gifting-uniforms.html':'services.html#cat-gifting-and-uniforms',
+          }
+          s = open('services.html', encoding='utf-8').read()
+          s = re.sub(r'<section id="all-categories".*?</section>\n?', '', s, flags=re.S)
+          s = re.sub(r'"url": "https://infisource\.in/services\.html#cat-[a-z0-9-]+"', '"url": "https://infisource.in/services.html"', s)
+          s = re.sub(r'\n{3,}', '\n\n', s)
+          open('services.html','w',encoding='utf-8').write(s)
+          for f in ['index.html','about.html','services.html','contact.html','vendor.html']:
+              t = open(f, encoding='utf-8').read()
+              for slug, target in SLUG2CAT.items():
+                  t = t.replace('href="%s"' % slug, 'href="%s"' % target)
+              open(f,'w',encoding='utf-8').write(t)
+          sm = open('sitemap.xml', encoding='utf-8').read()
+          for slug in NEW + ['housekeeping-supplies.html','mep-solutions.html','vendor-consolidation.html']:
+              sm = re.sub(r'\s*<url>\s*<loc>https://infisource\.in/' + re.escape(slug) + r'</loc>.*?</url>', '', sm, flags=re.S)
+          open('sitemap.xml','w',encoding='utf-8').write(sm)
+          css = open('assets/css/polish.css', encoding='utf-8').read()
+          m = '/* ---------- static, crawlable category detail (SEO) ---------- */'
+          if m in css:
+              open('assets/css/polish.css','w',encoding='utf-8').write(css[:css.index(m)].rstrip() + '\n')
+          print('revert applied; pages now:', sorted(os.listdir('.')))
+          PY
+          git config user.name "infisource-bot"
+          git config user.email "bot@infisource.in"
+          git add -A
+          git commit -m "revert: restore previous site design" || echo "nothing to commit"
+          git push
