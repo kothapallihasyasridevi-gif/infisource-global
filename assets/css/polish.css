@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap');
 /* ============================================================
    InfiSource Corporation Private Limited - polish pass
    Loaded after style.css. Typography sizing / weight, footer
@@ -153,43 +154,3 @@ html[data-theme="dark"] .theme-btn .i-moon{display:block;}
 @media(max-width:540px){.brand{font-size:17px;}.brand img{width:34px;height:34px;flex:0 0 34px;}}
 @media(max-width:480px){.brand{font-size:16px;max-width:56%;}}
 @media(max-width:390px){.brand{font-size:15px;max-width:58%;}.brand img{width:30px;height:30px;flex:0 0 30px;}}
-
-/* ---------- static, crawlable category detail (SEO) ---------- */
-.cats-static{padding:64px 0 8px;}
-.cats-static-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:30px;}
-.cat-static{border:1px solid var(--line);border-radius:16px;padding:24px 24px 20px;background:var(--white);scroll-margin-top:96px;}
-.cat-static-top{display:flex;align-items:baseline;gap:12px;}
-.cat-static-num{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.08em;}
-.cat-static h3{font-size:19px;margin:0;}
-.cat-static h4{font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--grey-700);margin:18px 0 8px;}
-.cat-static p{font-size:14.5px;line-height:1.6;color:var(--grey-700);margin:8px 0 0;}
-.cat-static-items{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px 10px;}
-.cat-static-items li{font-size:13.5px;color:var(--grey-700);}
-.cat-static-items li:not(:last-child)::after{content:"·";margin-left:10px;color:var(--line);}
-@media(max-width:900px){.cats-static-grid{grid-template-columns:1fr;}}
-
-/* ---------- SEO content pages ---------- */
-.seo-hero{padding:54px 0 26px;background:linear-gradient(180deg,rgba(237,112,20,.05),transparent);}
-.crumbs{font-size:12.5px;color:var(--grey-700);display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
-.crumbs a{color:var(--grey-700);text-decoration:none;}.crumbs a:hover{color:var(--orange);}
-.crumbs span{opacity:.45;}
-.seo-hero h1{font-size:clamp(28px,4.2vw,46px);line-height:1.12;max-width:900px;}
-.seo-lede{font-size:17px;line-height:1.68;color:var(--grey-700);max-width:840px;margin-top:16px;}
-.seo-body{padding:8px 0 72px;}
-.seo-body h2{font-size:24px;margin:38px 0 12px;}
-.seo-body h3{font-size:17px;margin:22px 0 8px;}
-.seo-body p{font-size:15.5px;line-height:1.72;color:var(--grey-700);max-width:860px;margin:12px 0;}
-.seo-body ul{max-width:860px;margin:12px 0 12px 20px;padding:0;}
-.seo-body li{font-size:15.5px;line-height:1.72;color:var(--grey-700);margin:6px 0;}
-.seo-body strong{color:var(--ink);}
-.faq{max-width:900px;}
-.faq-item{border-top:1px solid var(--line);padding:18px 0 6px;}
-.faq-item h3{font-size:16.5px;margin:0 0 6px;}
-.faq-item p{margin:6px 0 12px;}
-.cat-static-more{margin-top:14px!important;}
-.cat-static-more a{font-size:13.5px;font-weight:800;color:var(--orange);text-decoration:none;}
-.cat-static-more a:hover{text-decoration:underline;}
-.seo-cta{margin-top:48px;border:1px solid var(--line);border-radius:18px;padding:30px 28px;background:var(--white);max-width:900px;}
-.seo-cta h2{margin-top:0;}
-.seo-cta-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;}
-@media(max-width:640px){.seo-hero{padding:34px 0 18px;}.seo-body h2{font-size:21px;}}
