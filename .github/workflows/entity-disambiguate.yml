@@ -1,0 +1,36 @@
+name: entity-disambiguate
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add entity disambiguation signals
+        run: |
+          python3 - <<'PY'
+          import os, re, json
+          ALT='"alternateName":["InfiSource","InfiSource Corporation Pvt Ltd","InfiSource Corporation Private Limited","InfiSource Global"],'
+          DIS='"disambiguatingDescription":"B2B corporate procurement and strategic sourcing company headquartered in Madhurabad"'
+          DIS='"disambiguatingDescription":"B2B corporate procurement and strategic sourcing company headquartered in Madhapur, Hyderabad, Telangana, India, serving corporates across India. Not affiliated with any similarly named software, consulting, technology or staffing company.",'
+          OLD='"legalName":"InfiSource Corporation Private Limited","url":'
+          NEW='"legalName":"InfiSource Corporation Private Limited",'+ALT+DIS+'"url":'
+          pages=["index.html","about.html","services.html","contact.html","vendor.html"]
+          for f in pages:
+              s=open(f,encoding="utf-8").read()
+              if '"alternateName"' in s:
+                  print("skip",f); continue
+              n=s.count(OLD)
+              if n==0:
+                  print("WARN pattern not found in",f); continue
+              s=s.replace(OLD,NEW)
+              open(f,"w",encoding="utf-8").write(s)
+              print("updated",f,"(",n,"occurrence(s) )")
+          PY
+          git config user.name "infisource-bot"
+          git config user.email "bot@infisource.in"
+          git add -A
+          git commit -m "seo: add alternateName and disambiguatingDescription for entity disambiguation" || echo "nothing to commit"
+          git push
